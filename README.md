@@ -8,8 +8,8 @@ Locally we have 802.1Q tagged vlans with a raspberry pi or similar acting as the
 
 
 * The [common](common) folder will contain elements which are common to both the gateways and the central policy router
-* The [gateway](gateway) folder will contain the config for the remote gateways (only one example) some of this will be generic
-* The [centralRouter](centralRouter) folder will contain the config for the linux box (raspberry pi) at the centre
+* The [exits](exits) folder will contain the config for the remote gatewaysm exit nodes (only one example) some of this will be generic
+* The [sites](sites) folder will contain the config for the linux box (raspberry pi) at the centre
 
 In terms of IP ranges I'm using RFC1918 IP's from the `172.16.0.0/12` and `192.168.0.0/16` ranges. As this is a small example `/27`'s with 32 IP's (generally considered 30 usable) is more than sufficent. A `/27` has a Netmask of `255.255.255.224`.  Vlan 1 is the management (native) vlan. For configuring things (eg via ssh) we will operate off vlan1. I know we can set any vlan as native (untagged).
 
