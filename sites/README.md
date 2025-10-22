@@ -25,3 +25,8 @@ Once everything is in place
 * `systemctl enable openvpn-client@ExitA` to enable the vpn for ExitA (repeat for the rest)
 * reboot and test. The reboot is simply to ensure everything starts correctly, eg eth0, ip forwarding etc
 
+
+For a road warrior config we would need to add additional ip rules
+`usr/sbin/ip rule add fwmark 10 lookup ExitA` (add 11 & ExitB etc)
+`iptables -t mangle -A OUTPUT -s 192.168.12.0/27 -j MARK --set-mark 10`
+`iptables -t nat -A POSTROUTING -o vpn-ExitA -m mark --mark 10 -j MASQUERADE`
