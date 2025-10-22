@@ -14,8 +14,9 @@ Locally we have 802.1Q tagged vlans with a raspberry pi or similar acting as the
 In terms of IP ranges I'm using RFC1918 IP's from the `172.16.0.0/12` and `192.168.0.0/16` ranges. As this is a small example `/27`'s with 32 IP's (generally considered 30 usable) is more than sufficent. A `/27` has a Netmask of `255.255.255.224`.  Vlan 1 is the management (native) vlan. For configuring things (eg via ssh) we will operate off vlan1. I know we can set any vlan as native (untagged).
 
 Assuming multiple links the table might look as follows. Note that I'm trying to align the ranges to make the explination simple
+
 |Branch|VPN Range|Client Range|Client VLAN|First IP|Last IP|
-|-|-|-|-|-|
+|-|-|-|-|-|-|
 |0||192.168.11.0/24|1|1|254|
 |A|172.16.12.0/27|192.168.12.0/27|10|1|30|
 |B|172.16.12.32/27|192.168.12.32/27|11|33|62|
@@ -30,22 +31,27 @@ Assuming multiple links the table might look as follows. Note that I'm trying to
 The details may look as follows
 ```mermaid
 graph TD;
- A([SSID A]) --> |192.168.12.0/27| PBR(Linux Policy Router)
- B([SSID B]) --> |192.168.12.32/27| PBR
- C([SSID C]) --> |192.168.12.64/27| PBR
- D([SSID D]) --> |192.168.12.96/27| PBR
- E([SSID E]) --> |192.168.12.128/27| PBR
- F([SSID F]) --> |192.168.12.160/27| PBR
- G([SSID G]) --> |192.168.12.192/27| PBR
- H([SSID H]) --> |192.168.12.224/27| PBR
- 0([SSID Home]) --> |192.168.11.0/24| PBR
+ 001([SSID Home]) --> 002(VLAN1<br/>192.168.11.0/24) --> PBR(Linux Policy Router)
+ A01([SSID A]) --> A02(VLAN10<br/>192.168.12.0/27)   --> PBR --> A04(VPN<br/>172.16.12.0/27)   --> A05(Exit A)
+ B01([SSID B]) --> B02(VLAN11<br/>192.168.12.32/27)  --> PBR --> B04(VPN<br/>172.16.12.32/27)  --> B05(Exit B)
+ C01([SSID C]) --> C02(VLAN12<br/>192.168.12.64/27)  --> PBR --> C04(VPN<br/>172.16.12.64/27)  --> C05(Exit C)
+ D01([SSID D]) --> D02(VLAN13<br/>192.168.12.96/27)  --> PBR --> D04(VPN<br/>172.16.12.96/27)  --> D05(Exit D)
+ E01([SSID E]) --> E02(VLAN14<br/>192.168.12.128/27) --> PBR --> E04(VPN<br/>172.16.12.128/27) --> E05(Exit E)
+ F01([SSID F]) --> F02(VLAN15<br/>192.168.12.160/27) --> PBR --> F04(VPN<br/>172.16.12.160/27) --> F05(Exit F)
+ G01([SSID G]) --> G02(VLAN16<br/>192.168.12.192/27) --> PBR --> G04(VPN<br/>172.16.12.192/27) --> G05(Exit G)
+ H01([SSID H]) --> H02(VLAN17<br/>192.168.12.224/27) --> PBR --> H04(VPN<br/>172.16.12.224/27) --> H05(Exit H)
+```
 
-```
-```
- flowchart TD
-    A[Christmas] -->|Get money| B(Go shopping)
-    B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
-    C -->|Three| F[fa:fa-car Car]
+From a client routing persective this looks like the following
+```mermaid
+graph TD;
+ 001([SSID Home]) --> 002(VLAN1<br/>192.168.11.0/24) --> PBR(Linux Policy Router<br/>Management)
+ A01([SSID A]) --> A02(VLAN10<br/>192.168.12.0/27)   --> A03(Linux Policy Router<br/>Table 10) --> A04(VPN<br/>172.16.12.0/27)   --> A05(Exit A)
+ B01([SSID B]) --> B02(VLAN11<br/>192.168.12.32/27)  --> B03(Linux Policy Router<br/>Table 11) --> B04(VPN<br/>172.16.12.32/27)  --> B05(Exit B)
+ C01([SSID C]) --> C02(VLAN12<br/>192.168.12.64/27)  --> C03(Linux Policy Router<br/>Table 12) --> C04(VPN<br/>172.16.12.64/27)  --> C05(Exit C)
+ D01([SSID D]) --> D02(VLAN13<br/>192.168.12.96/27)  --> D03(Linux Policy Router<br/>Table 13) --> D04(VPN<br/>172.16.12.96/27)  --> D05(Exit D)
+ E01([SSID E]) --> E02(VLAN14<br/>192.168.12.128/27) --> E03(Linux Policy Router<br/>Table 14) --> E04(VPN<br/>172.16.12.128/27) --> E05(Exit E)
+ F01([SSID F]) --> F02(VLAN15<br/>192.168.12.160/27) --> F03(Linux Policy Router<br/>Table 15) --> F04(VPN<br/>172.16.12.160/27) --> F05(Exit F)
+ G01([SSID G]) --> G02(VLAN16<br/>192.168.12.192/27) --> G03(Linux Policy Router<br/>Table 16) --> G04(VPN<br/>172.16.12.192/27) --> G05(Exit G)
+ H01([SSID H]) --> H02(VLAN17<br/>192.168.12.224/27) --> H03(Linux Policy Router<br/>Table 17) --> H04(VPN<br/>172.16.12.224/27) --> H05(Exit H)
 ```
