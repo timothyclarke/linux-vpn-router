@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/sbin/ip ro add default via $5 dev vpn-ExitB table ExitB

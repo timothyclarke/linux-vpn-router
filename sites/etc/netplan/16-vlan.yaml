@@ -1,0 +1,16 @@
+network:
+  version: 2
+  vlans:
+    vlan16:
+      addresses:
+      - "192.168.12.193/27"
+      dhcp6: false
+      id: 16
+      link: "eth0"
+      routes:
+        - to: 192.168.12.192/27
+          table: 16
+      routing-policy:
+        - from: 192.168.12.192/27
+          table: 16
+

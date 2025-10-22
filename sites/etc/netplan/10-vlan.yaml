@@ -1,0 +1,16 @@
+network:
+  version: 2
+  vlans:
+    vlan10:
+      addresses:
+      - "192.168.12.1/27"
+      dhcp6: false
+      id: 10
+      link: "eth0"
+      routes:
+        - to: 192.168.12.0/27
+          table: 10
+      routing-policy:
+        - from: 192.168.12.0/27
+          table: 10
+
