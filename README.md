@@ -11,17 +11,32 @@ Locally we have 802.1Q tagged vlans with a raspberry pi or similar acting as the
 * The [gateway](gateway) folder will contain the config for the remote gateways (only one example) some of this will be generic
 * The [centralRouter](centralRouter) folder will contain the config for the linux box (raspberry pi) at the centre
 
-In terms of IP ranges I'm using RFC1918 IP's from the `172.16.0.0/12` and `192.168.0.0/16` ranges. As this is a small example `/27`'s with 32 IP's (generally considered 30 usable) is more than sufficent. A `/27` has a Netmask of `255.255.255.224`
+In terms of IP ranges I'm using RFC1918 IP's from the `172.16.0.0/12` and `192.168.0.0/16` ranges. As this is a small example `/27`'s with 32 IP's (generally considered 30 usable) is more than sufficent. A `/27` has a Netmask of `255.255.255.224`.  Vlan 1 is the management (native) vlan. For configuring things (eg via ssh) we will operate off vlan1. I know we can set any vlan as native (untagged).
 
 Assuming multiple links the table might look as follows. Note that I'm trying to align the ranges to make the explination simple
-|Branch|VPN Range|Client Range|First IP|Last IP|
+|Branch|VPN Range|Client Range|Client VLAN|First IP|Last IP|
 |-|-|-|-|-|
-|A|172.16.12.0/27|192.168.12.0/27|1|30|
-|B|172.16.12.32/27|192.168.12.32/27|33|62|
-|C|172.16.12.64/27|192.168.12.64/27|65|94|
-|D|172.16.12.96/27|192.168.12.96/27|97|126|
-|A|172.16.12.128/27|192.168.12.128/27|129|158|
-|B|172.16.12.160/27|192.168.12.160/27|161|190|
-|C|172.16.12.192/27|192.168.12.192/27|193|222|
-|D|172.16.12.224/27|192.168.12.224/27|225|254|
+|0||192.168.11.0/24|1|1|254|
+|A|172.16.12.0/27|192.168.12.0/27|10|1|30|
+|B|172.16.12.32/27|192.168.12.32/27|11|33|62|
+|C|172.16.12.64/27|192.168.12.64/27|12|65|94|
+|D|172.16.12.96/27|192.168.12.96/27|13|97|126|
+|A|172.16.12.128/27|192.168.12.128/27|14|129|158|
+|B|172.16.12.160/27|192.168.12.160/27|15|161|190|
+|C|172.16.12.192/27|192.168.12.192/27|16|193|222|
+|D|172.16.12.224/27|192.168.12.224/27|17|225|254|
 
+
+The details may look as follows
+```mermaid
+graph TD;
+ A([SSID A]) --> |192.168.12.0/27| PBR(Linux Policy Router) 
+```
+```
+ flowchart TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+```
