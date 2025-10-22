@@ -31,7 +31,7 @@ Assuming multiple links the table might look as follows. Note that I'm trying to
 The details may look as follows
 ```mermaid
 graph TD;
- 001([SSID Home]) --> 002(VLAN1<br/>192.168.11.0/24) --> PBR(Linux Policy Router)
+ 001([SSID Home]) --> 002(VLAN1<br/>192.168.11.0/24) --> PBR(Linux Policy Router<br/>Site01)
  A01([SSID A]) --> A02(VLAN10<br/>192.168.12.0/27)   --> PBR --> A04(VPN<br/>172.16.12.0/27)   --> A05(Exit A)
  B01([SSID B]) --> B02(VLAN11<br/>192.168.12.32/27)  --> PBR --> B04(VPN<br/>172.16.12.32/27)  --> B05(Exit B)
  C01([SSID C]) --> C02(VLAN12<br/>192.168.12.64/27)  --> PBR --> C04(VPN<br/>172.16.12.64/27)  --> C05(Exit C)
@@ -54,4 +54,27 @@ graph TD;
  F01([SSID F]) --> F02(VLAN15<br/>192.168.12.160/27) --> F03(Linux Policy Router<br/>Table 15) --> F04(VPN<br/>172.16.12.160/27) --> F05(Exit F)
  G01([SSID G]) --> G02(VLAN16<br/>192.168.12.192/27) --> G03(Linux Policy Router<br/>Table 16) --> G04(VPN<br/>172.16.12.192/27) --> G05(Exit G)
  H01([SSID H]) --> H02(VLAN17<br/>192.168.12.224/27) --> H03(Linux Policy Router<br/>Table 17) --> H04(VPN<br/>172.16.12.224/27) --> H05(Exit H)
+```
+
+Each gateway is configured / assumed to have multiple such sites connecting. Note that this is NOT a site to site configuration.
+
+Extending this to multiple sites we have
+|Site|Range|
+|-|-|
+|01|192.168.12.0/24|
+|02|192.168.13.0/24|
+|03|192.168.14.0/24|
+|04|192.168.15.0/24|
+|05|192.168.16.0/24|
+|06|192.168.17.0/24|
+
+As an example
+```mermaid
+graph TD;
+ A01(Site01<br/>SSID A) --> A02(VLAN10<br/>192.168.12.0/27) --> A03(Linux Policy Router<br/>Table 10<br>) --> VPN(VPN<br/>172.16.12.0/27) --> A05(Exit A)
+ B01(Site02<br/>SSID A) --> B02(VLAN10<br/>192.168.13.0/27) --> B03(Linux Policy Router<br/>Table 10<br>) --> VPN
+ C01(Site03<br/>SSID A) --> C02(VLAN10<br/>192.168.14.0/27) --> C03(Linux Policy Router<br/>Table 10<br>) --> VPN
+ D01(Site04<br/>SSID A) --> D02(VLAN10<br/>192.168.15.0/27) --> D03(Linux Policy Router<br/>Table 10<br>) --> VPN
+ E01(Site05<br/>SSID A) --> E02(VLAN10<br/>192.168.16.0/27) --> E03(Linux Policy Router<br/>Table 10<br>) --> VPN
+ F01(Site06<br/>SSID A) --> F02(VLAN10<br/>192.168.17.0/27) --> F03(Linux Policy Router<br/>Table 10<br>) --> VPN
 ```
