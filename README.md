@@ -11,6 +11,8 @@ Locally we have 802.1Q tagged vlans with a raspberry pi or similar acting as the
 * The [exits](exits) folder will contain the config for the remote gatewaysm exit nodes (only one example) some of this will be generic
 * The [sites](sites) folder will contain the config for the linux box (raspberry pi) at the centre
 
+## Topology
+
 In terms of IP ranges I'm using RFC1918 IP's from the `172.16.0.0/12` and `192.168.0.0/16` ranges. As this is a small example `/27`'s with 32 IP's (generally considered 30 usable) is more than sufficent. A `/27` has a Netmask of `255.255.255.224`.  Vlan 1 is the management (native) vlan. For configuring things (eg via ssh) we will operate off vlan1. I know we can set any vlan as native (untagged).
 
 Assuming multiple links the table might look as follows. Note that I'm trying to align the ranges to make the explination simple
@@ -77,4 +79,26 @@ graph TD;
  D01(Site04<br/>SSID A) --> D02(VLAN10<br/>192.168.15.0/27) --> D03(Linux Policy Router<br/>Table 10<br>) --> VPN
  E01(Site05<br/>SSID A) --> E02(VLAN10<br/>192.168.16.0/27) --> E03(Linux Policy Router<br/>Table 10<br>) --> VPN
  F01(Site06<br/>SSID A) --> F02(VLAN10<br/>192.168.17.0/27) --> F03(Linux Policy Router<br/>Table 10<br>) --> VPN
+```
+
+## Cloaking
+Simple config for [cbeuw/Cloak](https://github.com/cbeuw/Cloak) has been added so VPN's are supported in locations which otherwise might be blocked.  Cloak masks openvpn traffic so it appears to be standard HTTPS traffic.
+
+On the exit node side it is an additional process so regular OpenVPN traffic may be on one port with Cloak on a seperate port, AKA supporting both cloaked and regular vpn traffic.
+On the site side the openvpn client sets to the remote openvpn server as the cloak server on localhost.
+
+As an examples
+* SiteA (Cloaking)
+* SiteB (UnCloaked)
+```mermaid
+graph TD;
+ A01(Site01<br/>SSID A) --> A02(VLAN10<br/>192.168.12.0/27) --> A03(Linux Policy Router<br/>Table 10<br>) --> A04(OpenVPN Client) --> A05(Cloak client<br>127.0.0.1) --> A06(Internet with restritions) --> VPN(VPN<br/>172.16.12.0/27)
+ B01(Site02<br/>SSID A) --> B02(VLAN10<br/>192.168.13.0/27) --> B03(Linux Policy Router<br/>Table 10<br>) --> B04(OpenVPN Client) --> B06(Unfiltered Internet) --> VPN
+```
+
+* ExitA with Cloaking Support
+```mermaid
+graph TD;
+ A01(SiteA - Cloaked) --> A02(Internet with restritions) --> A03(Cloak Server) --> VPN(OpenVPN server)
+ B01(SiteB - UnCloaked) --> B02(Unfiltered Internet) --> VPN
 ```

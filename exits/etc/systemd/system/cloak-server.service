@@ -1,0 +1,12 @@
+[Unit]
+Description=Cloak tunnel server
+After=network.target auditd.service
+
+[Service]
+ExecStart=/usr/local/bin/ck-server-linux-amd64-v2.12.0 -c /etc/cloak/server.json
+KillMode=process
+Restart=on-failure
+Type=exec
+
+[Install]
+WantedBy=multi-user.target

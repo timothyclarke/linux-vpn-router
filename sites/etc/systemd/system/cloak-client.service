@@ -1,0 +1,12 @@
+[Unit]
+Description=Cloak tunnel client
+After=network.target auditd.service
+
+[Service]
+ExecStart=/usr/local/bin/ck-client-linux-amd64-v2.12.0 -c /etc/cloak/client.json -s <remoteIP> -p 443
+KillMode=process
+Restart=on-failure
+Type=exec
+
+[Install]
+WantedBy=multi-user.target
