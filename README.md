@@ -92,8 +92,8 @@ As an examples
 * SiteB (UnCloaked)
 ```mermaid
 graph TD;
- A01(Site01<br/>SSID A) --> A02(VLAN10<br/>192.168.12.0/27) --> A03(Linux Policy Router<br/>Table 10<br>) --> VPNClient(OpenVPN Client) --> Cloak(Cloak client<br>127.0.0.1) --> InetA(Internet with restritions) --> VPN(VPN<br/>172.16.12.0/27)
- B01(Site02<br/>SSID A) --> B02(VLAN10<br/>192.168.13.0/27) --> B03(Linux Policy Router<br/>Table 10<br>) --> VPNClient --> InetB(Unfiltered Internet) --> VPN
+ A01(Site01<br/>SSID A) --> A02(VLAN10<br/>192.168.12.0/27) --> A03(Linux Policy Router<br/>Table 10<br>) --> A04(OpenVPN Client) --> A05(Cloak client<br>127.0.0.1) --> A06(Internet with restritions) --> VPN(VPN<br/>172.16.12.0/27)
+ B01(Site02<br/>SSID A) --> B02(VLAN10<br/>192.168.13.0/27) --> B03(Linux Policy Router<br/>Table 10<br>) --> B04(OpenVPN Client) --> B06(Unfiltered Internet) --> VPN
 ```
 
 * ExitA with Cloaking Support
